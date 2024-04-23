@@ -1,0 +1,26 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "server2": "nodemon --quiet server/server.js",
+        "server-dev": "npm start --prefix server",
+        "client-dev": "npm start --prefix client",
+        "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "devOld": "nodemon server/server.js",
+        "startOld": "node server/server.js",
+        "build": "npm install && npm install --prefix client && npm run build --prefix client"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^8.2.2",
+        "dotenv": "^16.4.5",
+        "nodeenv": "^3.0.75",
+        "nodemon": "^3.1.0"
+    }
+}

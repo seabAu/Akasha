@@ -1,0 +1,157 @@
+:root {
+    --color-green: #239847;
+    --color-primary: #343434;
+    --color-secondary: #212121;
+    --color-tertiary: #3e3e3e;
+    --color-quaternary: #282828;
+    --color-quinary: #2e2e2e;
+    --color-quaternary-alt: #4a4a4a;
+    --color-quinary-alt: #242b44;
+    --color-quaternary-highlight: #453979;
+    --color-quinary-highlight: #242b44;
+    --color-error: #f22;
+    --color-text: #ccc;
+    --color-header: #453979;
+    --color-body: #242b44;
+    --color-background: #202020;
+    --color-highlightColor: #fdad51;
+    --color-highlightColor2: #fef48b;
+    --color-text: #f2f4ec;
+    --color-button-text: #dcdcdc;
+    --color-button-bg: #525252;
+    --color-button-bg-hover: #3d6fbb;
+    --color-button-bg-active: #df8576;
+    --color-button-bg-focus: #df8576;
+    --secondary-color: #676767;
+    --secondary-bg-color: #4a4a4a;
+    --secondary-hover-color: #524524;
+    --border-color: #0003;
+    --color-select-border: #777;
+    --color-select-focus: #00f;
+    --color-select-arrow: var(--color-select-border);
+    --boxshadow: -2px -2px 2px 0px #ffffff0d, 2px 2px 2px 0px #00000080;
+    --boxshadowSmooth: -1px -1px 2px 1px #ffffff11, 1px 1px 2px 1px #00000088, -2px -2px 4px 1px #ffffff11, 2px 2px 4px 1px #00000088;
+    --boxshadowInset: inset -2px -2px 3px 0px #ffffff1a, inset 2px 2px 3px 0px #000c;
+    --boxshadowFlat: 0px 0px 1px 1px #22222288;
+    --color-box-shadow-primary: #2d2d2d44;
+    --color-box-shadow-secondary: #2d2d2d44;
+    --color-box-shadow-hover: #2d2d2daa;
+    --box-shadow-params-table-cell: 2px 2px 2px 1px var(--color-box-shadow-primary);
+    --box-shadow-params-table: 0px 0px 10px var(--color-box-shadow-primary);
+    --box-shadow-params-table-row-hover: inset 0px 0px 10px var(--color-box-shadow-hover);
+    --box-shadow-params-table-hover: 0px 0px 10px var(--color-box-shadow-hover);
+    --box-shadow-params-table-bg: 9px 9px 16px var(--color-box-shadow-primary), -9px -9px 16px var(--color-box-shadow-secondary);
+    --text-shadow: rgba(0, 0, 0, .498) 0px 1px;
+    --text-shadow-params: 0px 0.05rem 0.05rem #000000bb;
+    --bshadow-xl: 0px 0px 4px 1px #0000003d, 1px -1px 50px -25px #000c;
+    --media-size-sm: 300px;
+    --media-size-md: 600px;
+    --media-size-lg: 900px;
+    --media-size-xl: 1200px;
+    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-gradient: linear-gradient(180deg, #ffffff26, #fff0);
+    --bs-body-font-family: var(--bs-font-sans-serif);
+    --font-family-source: "Source Sans Pro", sans-serif;
+    --font-size-body: 0.85rem;
+    --font-size-button: 0.8rem;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.25;
+    --font-size-table: 0.65rem;
+    --font-size-footer: 0.65rem;
+    --color-table-body: #342e2e;
+    --color-table-text: #fff;
+    --color-table-hover: #9d9d9d;
+    --color-table-row-header: #f3f3f388;
+    --color-table-row-even: #88888888;
+    --color-table-row-odd: #bbbbbb88;
+    --color-table-border: #4a4a4a;
+    --max-width-table-cell: 20rem;
+    --max-width-table: 100rem;
+    --sidebar-width: 16rem;
+    --sidepanel-width: 16rem;
+    --page-height: 100vh;
+    --page-width: 100vw;
+    --header-height: 40px;
+    --footer-height: 60px;
+    --card-width: 40rem;
+    --icon-size: 0.9rem;
+    --transition-bezier-0pt2: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    --transition-func-bezier: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+body,
+html {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 100vh;
+    max-width: 100vw;
+    height: 100%;
+    min-height: 95vh;
+    min-width: 95vw;
+}
+
+body {
+    font-family: var(--font-family-source);
+    background-color: var(--color-secondary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    max-height: 100vh;
+    max-width: 100vw;
+    height: 100%;
+    min-height: 95vh;
+    min-width: 95vw;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.icon-container {
+    border-radius: 50%;
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.icon-container:hover {
+    background-color: #1e1e1e;
+}
+
+.hover-dark {
+    border-radius: 50%;
+    padding: 4px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.hover-dark:hover {
+    background-color: #1e1e1e;
+}
+
+
+/* Scrollbar styling */
+
+::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+::-webkit-scrollbar-track {
+    width: 8px;
+    height: 8px;
+    background-color: #1e1e1e;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    border-radius: 1em;
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    width: 8px !important;
+    background-color: var(--color-tertiary);
+}
