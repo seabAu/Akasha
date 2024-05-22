@@ -162,7 +162,7 @@ const getGroupMessages = async( req, res ) => {
             chatId: chat._id
         } ).sort( { createdAt: -1 } );
 
-        res.status( 200 ).json( { message: "Success", data: messages } );
+        res.status( 200 ).json( { message: "Successfully fetched group messages", data: messages } );
     } catch ( error ) {
         res.status( 500 ).json( { error: error.message } )
         console.log( "Error in getGroupMessages: ", error.message );
@@ -172,7 +172,8 @@ const getGroupMessages = async( req, res ) => {
 // Get all chats a user is involved with.
 const getChats = async( req, res ) => {
     const userId = req.user._id; // Sent in cookie
-    // console.log( "getChats -> userId = ", req.user );
+    // 
+    console.log( "getChats -> userId = ", req.user );
 
     try {
         // Find all chats this user is involved with.
@@ -181,9 +182,12 @@ const getChats = async( req, res ) => {
         } ).populate( {
             path: 'users', // A reference to the User model, via the object type set in the schema. 
             select: 'username imgAvatar' // What fields to append from users
-        } );
+        } ).sort(
+            { createdAt: 1 }
+        );
 
-        res.status( 200 ).json( { message: "Success", data: chats } );
+        console.log( "getChats -> userId = ", req.user );
+        res.status( 200 ).json( { message: "Successfully fetched chat messages", data: chats } );
     } catch ( error ) {
         res.status( 500 ).json( { error: error.message } )
         console.log( "Error in getChats: ", error.message );

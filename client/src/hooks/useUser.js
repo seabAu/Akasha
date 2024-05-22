@@ -40,27 +40,27 @@ const useUser = () => {
         }
     };
 
-	const handleAccountFreeze = async () => {
-		if (!window.confirm("Are you sure you want to freeze your account?")) return;
+    const handleAccountFreeze = async() => {
+        if ( !window.confirm( "Are you sure you want to freeze your account?" ) ) return;
 
-		try {
-			const res = await fetch("/api/users/freeze", {
-				method: "PUT",
-				headers: { "Content-Type": "application/json" },
-			});
-			const data = await res.json();
+        try {
+            const res = await fetch( "/api/users/freeze", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+            } );
+            const data = await res.json();
 
-			if (data.error) {
-				return showToast("Error", data.error, "error");
-			}
-			if (data.success) {
-				await handleLogout();
-				showToast("Success", "Your account has been frozen", "success");
-			}
-		} catch (error) {
-			showToast("Error", error.message, "error");
-		}
-	};
+            if ( data.error ) {
+                return showToast( "Error", data.error, "error" );
+            }
+            if ( data.success ) {
+                await handleLogout();
+                showToast( "Success", "Your account has been frozen", "success" );
+            }
+        } catch ( error ) {
+            showToast( "Error", error.message, "error" );
+        }
+    };
 
     return ( { handleAccountFreeze, user, loading, getUsers } );
 }
@@ -82,7 +82,7 @@ const useUserFollow = ( user ) => {
             } )
             const data = await res.json();
 
-            console.log( "followUser -> data: ", data );
+            /// console.log( "followUser -> data: ", data );
             if ( data.error ) {
                 // Error
                 showToast( "Error", data.error, "error" );
@@ -90,7 +90,7 @@ const useUserFollow = ( user ) => {
             } else {
                 // Success
                 showToast( "Success", data.message, "success" );
-                console.log( "followUser -> success -> data.user: ", user );
+                /// console.log( "followUser -> success -> data.user: ", user );
                 if ( following ) {
                     showToast( "Success", `Unfollowed ${user.name}`, "success" );
                     user.followers.pop(); // simulate removing from followers
@@ -103,7 +103,7 @@ const useUserFollow = ( user ) => {
         } catch ( error ) {
             console.error( "Error in followUser: ", error );
         } finally {
-            console.log( "followUser -> finally -> user: ", user );
+            /// console.log( "followUser -> finally -> user: ", user );
             setLoading( false );
         }
     }

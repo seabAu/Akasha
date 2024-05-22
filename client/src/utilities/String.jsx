@@ -17,11 +17,11 @@ export function toCapitalCase(text) {
 export const kebabCase = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
 export const upperCamelCase = (s) => s.replace(/(^|-)([a-z])/g, (x, y, l) => `${l.toUpperCase()}`);
 
-export const PrettyPrintJson = React.memo(({ data }) => (
-	<div>
-		<pre>{JSON.stringify(data, null, 2)}</pre>
-	</div>
-));
+// export const PrettyPrintJson = React.memo(({ data }) => (
+// 	<div>
+// 		<pre>{JSON.stringify(data, null, 2)}</pre>
+// 	</div>
+// ));
 
 // Source: https://1loc.dev/random/generate-a-random-string-from-given-characters/
 // Example call: generateString(10, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');

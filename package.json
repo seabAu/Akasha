@@ -1,5 +1,5 @@
 {
-    "name": "server",
+    "name": "akasha",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
@@ -8,6 +8,7 @@
         "server2": "nodemon --quiet server/server.js",
         "server-dev": "npm start --prefix server",
         "client-dev": "npm start --prefix client",
+        "client-run": "nodemon index.js",
         "dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
         "test": "echo \"Error: no test specified\" && exit 1",
         "devOld": "nodemon server/server.js",

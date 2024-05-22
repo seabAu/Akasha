@@ -42,7 +42,7 @@ const Chat = ({isOnline = true}) => {
             <Stack direction={"column"} fontSize={"sm"}>
                 <Text fontWeight='700' display={ "flex" } alignItems={ "center" }>
                     USERNAME
-                    <Image src='/assets/verified.png' w={4} h={4} ml={1}/>
+                    <Image src='./../assets/verified.png' w={4} h={4} ml={1}/>
                 </Text>
                 <Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>Message text bla bla bla bla</Text>
             </Stack>

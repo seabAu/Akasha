@@ -32,7 +32,7 @@ const useGetPost = ( { postId } ) => {
                 } else {
                     // Success
                     showToast( "Success", data.message, "success" );
-                    console.log( "useGetPost.js -> handleGetPost.data.success -> data: ", data, data.post );
+                    // console.log( "useGetPost.js -> handleGetPost.data.success -> data: ", data, data.post );
                     setPosts( [ data.post ] );
                     setPost( data.post );
                 }

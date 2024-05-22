@@ -28,16 +28,22 @@ const signupUser = async( req, res ) => {
         const salt = await bcrypt.genSalt( 10 );
         const hashedPassword = await bcrypt.hash( password, salt );
 
-        const newUser = new User( { name, email, username, password: hashedPassword } );
-
-        await newUser.save();
+        const newUser = new User( {
+            name,
+            email,
+            username,
+            password: hashedPassword
+        } );
 
         if ( newUser ) {
-            generateTokenAndSetCookie( newUser._id, res );
+            const token = generateTokenAndSetCookie( newUser._id, res );
+            newUser.token = token;
+            await newUser.save();
 
             res
                 .status( 201 )
                 .json( {
+                    token: token,
                     user: {
                         ...newUser,
                         password: '',
@@ -45,7 +51,8 @@ const signupUser = async( req, res ) => {
                         id: newUser._id,
                         name: newUser.name,
                         email: newUser.email,
-                        username: newUser.username
+                        username: newUser.username,
+                        token: token,
                     },
                     message: "Signed in successfully"
                 } );
@@ -65,15 +72,95 @@ const signupUser = async( req, res ) => {
     }
 }
 
+const authUser = async( req, res ) => {
+    try
+    {
+        console.log( "AuthUser :: req.user.id = ", req.user.id );
+        // let user = User
+        //     .findById( req.user.userId )
+        //     .select( "-password" );
+        let user = req.user; 
+
+        if ( user )
+        {
+            console.log("res.status = ", res.status, ", user = ", req.user);
+            // res.json(user);
+            // let authorized = [ "superadmin", "admin" ].includes( user.role.toString() );
+            res.send({
+                user: user,
+                success: true,
+                status: res.status,
+                // message: `User ${authorized ? 'is' : 'is not'} authorized to enter admin areas`,
+            });
+        }
+        else
+        {
+            res.send({
+                user: {},
+                success: false,
+                message: "User not found; failed to authenticate with session token. Try logging out and then in.",
+                status: res.status,
+            });
+        }
+    } catch ( error ) {
+        res.send({
+            user: {},
+            success: false,
+            status: 500,
+            message: error.message
+        });
+        // res.status( 500 ).json( { error: error.message } );
+    }
+
+    /*
+    
+    console.log(
+        "userRoute.js :: api/users/auth/user",
+        // " :: req = ",
+        // req.headers,
+        " :: res.data = ",
+        res.data,
+        " :: res.user = ",
+        res.user,
+    );
+    // User.findById( req.user.id ).select( '-password' ).then( ( user ) => res.json( user ) );
+    User.findById(req.user.id)
+        .select("-password")
+        .then((user) => {
+            console.log("res.status = ", res.status, ", user = ", user);
+            // res.json(user);
+            let authorized = [ "superadmin", "admin" ].includes( user.role.toString() );
+            res.send({
+                user: {
+                    id: user.id,
+                    role: user.role,
+                    token: user.token,
+                    // auth: user.role === "admin",
+                    auth: authorized,
+                },
+                success: true,
+                status: res.status,
+                message: `User ${authorized ? 'is' : 'is not'} authorized to enter admin areas`,
+            });
+        });
+    */
+};
+
 const loginUser = async( req, res ) => {
     try {
         const { username, password } = req.body;
-        console.log( req.body );
         const user = await User.findOne( { username } );
+        console.log( "loginUser :: user = ", user );
 
-        const isCorrectPass = await bcrypt.compare( password, ( ( user !== null ) ?
-            ( user.password ) :
-            ( "" ) ) || "" );
+        const isCorrectPass = await bcrypt.compare(
+            password,
+            ( ( user !== null )
+                ?
+                ( user.password )
+                :
+                ( "" )
+            ) || ""
+        );
 
         if ( ( !user ) || ( !isCorrectPass ) ) {
             return res
@@ -81,7 +168,11 @@ const loginUser = async( req, res ) => {
                 .json( { error: "Invalid username or password" } );
         }
 
-        generateTokenAndSetCookie( user._id, res );
+        // On successful login, create a new token. Save it to the user document in the db, and send it back to the user. 
+        let token = generateTokenAndSetCookie( user._id, res );
+        user.token = token;
+        user.last_login = new Date();
+        user.save();
 
         // delete user.password; // delete user.email; delete user.updatedAt; user.id =
         // user._id; delete user._id; delete user.__v; console.log( user );
@@ -90,6 +181,7 @@ const loginUser = async( req, res ) => {
             .status( 200 )
             .json( {
                 // user: user,
+                token: token,
                 user: {
                     _id: user._id,
                     id: user._id,
@@ -104,7 +196,8 @@ const loginUser = async( req, res ) => {
                     status: user.status,
                     isFrozen: user.isFrozen,
                     isPrivate: user.isPrivate,
-                    settings: user.settings
+                    settings: user.settings,
+                    token: token
                 },
                 message: "User logged in successfully."
             } );
@@ -112,13 +205,12 @@ const loginUser = async( req, res ) => {
     } catch ( error ) {
         res
             .status( 500 )
-            .json( { error: error.message } )
+            .json( { message: error.message } )
         console.log( "Error in signupUser: ", error.message );
     }
 }
 
 const logoutUser = ( req, res ) => {
-    console.log( req.body );
     try {
         // Clear the cookie
         const { username, password } = req.body;
@@ -126,6 +218,7 @@ const logoutUser = ( req, res ) => {
         res
             .status( 200 )
             .json( { message: `User logged out successfully.` } );
+        console.log( "LogoutUser :: ", username, password );
     } catch ( error ) {
         res
             .status( 500 )
@@ -329,7 +422,7 @@ const getSuggestedUsers = async( req, res ) => {
                 const user = await User.findById( userId );
                 // const usersFollowed = user.following;
                 const usersFollowed = await User.findById( userId ).select( "following" );
-                /// console.log( "getSuggestedUsers: user = ", user, "\n", "usersFollowed = ", usersFollowed );
+                // console.log( "getSuggestedUsers: user = ", user, "\n", "usersFollowed = ", usersFollowed );
 
                 const users = await User.aggregate( [ {
                     $match: {
@@ -465,7 +558,7 @@ const updateUser = async( req, res ) => {
 
     try {
         let user = await User.findById( userId );
-        // console.log( "UpdateUser -> user = ", user, "\n\n\n", "userUpdate = ", userUpdate );
+        console.log( "UpdateUser -> user = ", user, "\n\n\n", "userUpdate = ", userUpdate );
         if ( !user )
             return res.status( 400 ).json( { error: "User not found" } );
 
@@ -515,42 +608,6 @@ const updateUser = async( req, res ) => {
         }
 
         // Update values if present in req.body;
-        /*
-        if ( userUpdate.name !== null && userUpdate.name !== user.name ) {
-            user.name = userUpdate.name;
-        }
-        if ( userUpdate.username !== null && userUpdate.username !== user.username ) {
-            user.username = userUpdate.username;
-        }
-        if ( userUpdate.email !== null && userUpdate.email !== user.email ) {
-            user.email = userUpdate.email;
-        }
-        if ( userUpdate.imgAvatar !== null && userUpdate.imgAvatar !== user.imgAvatar ) {
-            user.imgAvatar = userUpdate.imgAvatar;
-        }
-        if ( userUpdate.status !== null && userUpdate.status !== user.status ) {
-            user.status = userUpdate.status;
-        }
-        if ( userUpdate.bio !== null && userUpdate.bio !== user.bio ) {
-            user.bio = userUpdate.bio;
-        }
-        if ( userUpdate.isFrozen !== null && userUpdate.isFrozen !== user.isFrozen ) {
-            user.isFrozen = userUpdate.isFrozen;
-        }
-        if ( userUpdate.isVisible !== null && userUpdate.isVisible !== user.isVisible ) {
-            user.isVisible = userUpdate.isVisible;
-        }
-        if ( userUpdate.isPrivate !== null && userUpdate.isPrivate !== user.isPrivate ) {
-            user.isPrivate = userUpdate.isPrivate;
-        }
-        if ( userUpdate.isVerified !== null && userUpdate.isVerified !== user.isVerified ) {
-            user.isVerified = userUpdate.isVerified;
-        }
-        if ( userUpdate.settings !== null ) {
-            user.settings = userUpdate.settings;
-        }
-        */
-
         user.name = swapIfValid( user.name, userUpdate.name );
         user.username = swapIfValid( user.username, userUpdate.username );
         user.email = swapIfValid( user.email, userUpdate.email );
@@ -642,6 +699,7 @@ const controllerBoilerplate = async( req, res ) => {
 export {
     signupUser,
     loginUser,
+    authUser,
     logoutUser,
     followUser,
     updateUser,

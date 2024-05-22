@@ -32,6 +32,7 @@ const useAuth = () =>
             {
                 // Error
                 showToast( "Error", data.error, "error" );
+                console.log( "Error in login: ", data.error );
             } else
             {
                 // Success
@@ -163,7 +164,7 @@ const useAuth = () =>
 
             const data = await res.json();
 
-            console.log( 'handleDelete -> data = ', data );
+            // console.log( 'handleDelete -> data = ', data );
 
             if ( data.error )
             {
@@ -183,7 +184,7 @@ const useAuth = () =>
 
         } catch ( error )
         {
-            console.error( "Error in handleLogout: ", error );
+            console.error( "Error in handleDelete: ", error );
         }
     }
 
@@ -215,7 +216,7 @@ const useAuth = () =>
         try
         {
             // Fetch request
-            console.log( "Sending useProfileUpdate -> updateUser -> inputs = ", inputs );
+            // console.log( "Sending useProfileUpdate -> updateUser -> inputs = ", inputs );
             const res = await fetch( `api/users/update/${ userId }`, {
                 method: "PUT",
                 headers: {
@@ -228,7 +229,7 @@ const useAuth = () =>
 
             const data = await res.json();
 
-            console.log( data );
+            // console.log( data );
 
             if ( data.error )
             {
@@ -239,7 +240,7 @@ const useAuth = () =>
             {
                 // Success
                 const updatedUser = data.user;
-                console.log( updatedUser );
+                // console.log( updatedUser );
 
                 showToast( "Success", data.message, "success" );
 

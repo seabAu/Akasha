@@ -8,7 +8,7 @@ const protectRoute = async( req, res, next ) => {
     // Runs BEFORE any route controller functions are parsed.
     // console.log( "protectRoute: ", req, res, next );
     try {
-        const token = req.cookies.jwt;
+        const token = req.cookies.jwt || req.header("x-auth-token");
 
         if ( !token ) {
             // Not authorized.

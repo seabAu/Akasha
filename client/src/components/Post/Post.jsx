@@ -144,11 +144,11 @@ const Post = ( { post, userId } ) =>
 
                 {/* Post username */ }
                 <Flex justifyContent={ "space-between" } w={ "full" }>
-                    <Link to={ `/${ user?.username }` }>
+                    <Link to={ `/u/${ user?.username }` }>
                         <UsernameTag username={ `${ user?.username }` } isVerified={ `${user?.isVerified}` } onClick={ ( e ) =>
                         {
                             e.preventDefault();
-                            navigate( `/${ user?.username }` );
+                            navigate( `/u/${ user?.username }` );
                         } } />
                     </Link>
 

@@ -11,6 +11,7 @@ import postsAtom from "../atoms/postsAtom";
 import useShowToast from '../hooks/useShowToast';
 import Post from '../components/Post/Post';
 import UserList from '../components/User/UserList';
+import * as utils from "../utilities";
 
 const HomePage = () =>
 {
@@ -48,7 +49,7 @@ const HomePage = () =>
                 else
                 {
                     // console.log(data.feedPosts);
-                    setPosts( data.feedPosts );
+                    setPosts( data.posts );
                 }
             }
             catch ( error )
@@ -65,12 +66,12 @@ const HomePage = () =>
 
     const buildPosts = ( data ) =>
     {
-        console.log( 'buildPosts: ', data );
-        if ( data.length > 0 )
+        // console.log( 'buildPosts: ', data );
+        if ( utils.val.isValidArray( data ) )
         {
             return (
                 <>
-                    { data.map( ( post ) =>
+                    { data?.map( ( post ) =>
                     {
                         return (
                             <Post key={ post._id }
@@ -83,6 +84,12 @@ const HomePage = () =>
                     ) }
                 </>
             );
+        }
+        else
+        {
+            return (
+                <>Nothing to see here.</>
+            )
         }
     }
 
@@ -135,7 +142,7 @@ const HomePage = () =>
                                 </Flex>
                             )
                             : (
-                                ( posts.length === 0 ) ? (
+                                ( posts?.length === 0 ) ? (
                                     <h1>Follow some users to see their post feeds.</h1>
                                 ) :
                                     (
@@ -164,122 +171,6 @@ const HomePage = () =>
                     <UserList />
                 </GridItem>
             </Grid>
-            {
-
-                /*
-
-            <Grid
-                templateAreas={ `"content aside"` }
-                // gridTemplateRows={'1fr 1fr '}
-                // gridTemplateColumns={'3fr 1fr'}
-                gridTemplateColumns={ {
-                    base: '100%',
-                    md: '4fr 1fr',
-                } }
-                w={ "100%" }
-                maxW={ '2fr' }
-                maxH={ 'full' }
-                // border={ '1px solid green' }
-                minH={ '100%' }
-                h={ "100%" }
-                overflow={ 'auto' }
-                gap='1'
-                // color='blackAlpha.700'
-                fontWeight='bold'
-            >
-                <GridItem
-                    // bg='pink.300'
-                    bg={ useColorModeValue( 'white', 'gray.dark' ) }
-                    pt={ 8 }
-                    // pl='2'
-                    w={ "100%" }
-                    h={ "100%" }
-                    maxH={ 'full' }
-                    // border={ '1px solid green' }
-                    minH={ '100%' }
-                    overflow={ 'auto' }
-                    area={ 'content' }>
-                    {
-                        loading
-                            ? (
-                                <Flex justify={ 'center' }>
-                                    <Spinner size={ 'xl' }
-                                    />
-                                </Flex>
-                            )
-                            : (
-                                ( posts.length === 0 ) ? (
-                                    <h1>Follow some users to see their post feeds.</h1>
-                                ) :
-                                    (
-                                        buildPosts( posts )
-                                    )
-                            )
-                    }
-                </GridItem>
-                <GridItem
-                    pos="relative"
-                    right={ 0 }
-                    // bg='green.300'
-                    bg={ useColorModeValue( 'white', 'gray.dark' ) }
-                    area={ 'aside' }
-                    pt={ 8 }
-                    // pl='2'
-                    flexShrink={ 0 }
-                    maxW={ 'auto' }
-                    maxH={ '100%' }
-                    overflowY={ 'auto' }
-                    display={ {
-                        base: "none",
-                        md: "block"
-                    } }>
-                    <UserList />
-                </GridItem>
-            </Grid>
-                */
-                /*
-            
-            <Box flexGrow={ 1 }
-            w={ "100%" }
-                maxH={ 'full' }
-                // border={ '1px solid green' }
-                minH={ '100%' }
-                h={ "100%" }
-                overflow={ 'auto' }
-            >
-                {
-                    loading
-                        ? (
-                            <Flex justify={ 'center' }>
-                                <Spinner size={ 'xl' }
-                                />
-                            </Flex>
-                        )
-                        : (
-                            ( posts.length === 0 ) ? (
-                                <h1>Follow some users to see their post feeds.</h1>
-                            ) :
-                                (
-                                    buildPosts( posts )
-                                )
-                        )
-                }
-            </Box>
-            <Box flexShrink={ 0 }
-                maxW={ '10em' }
-                maxH={ '100%' }
-                overflowY={'auto'}
-                display={ {
-                    base: "none",
-                    md: "block"
-                } }
-                pos="sticky"
-                right={ 0 }
-            >
-                <UserList />
-            </Box>
-            */
-            }
         </Flex>
     );
 }

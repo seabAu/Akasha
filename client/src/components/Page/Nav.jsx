@@ -234,7 +234,7 @@ const Nav = ( { children } ) =>
             bg={ useColorModeValue( 'white', 'gray.dark' ) }
             // border={ '1px solid white' }
             position={ 'relative' }
-            overflow={ 'hidden' }
+            // overflow={ 'hidden' }
             pos="fixed"
             h="full"
             w="full"

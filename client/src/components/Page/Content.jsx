@@ -8,6 +8,8 @@ const Content = ({children}) => {
             alignItems={ 'flex-start' }
             overflow={ 'auto' }
             h={ "100%" }
+            py={'8px'}
+            px={'8px'}
         >
             <Box flexGrow={ 1 }
                 w={ "100%" }

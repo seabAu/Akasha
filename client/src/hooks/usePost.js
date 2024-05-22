@@ -41,7 +41,7 @@ const usePost = () => {
             } );
             const data = await res.json();
 
-            console.log( "handleDeletePost -> data: ", data, "post._id = ", post._id, "\n", "username = ", username );
+            // console.log( "handleDeletePost -> data: ", data, "post._id = ", post._id, "\n", "username = ", username );
 
             if ( data.error ) {
                 // Error
@@ -52,7 +52,7 @@ const usePost = () => {
                 showToast( "Success", data.message, "success" );
                 setPosts( ( prev ) => prev.filter( ( p ) => p._id !== post._id ) );
 
-                console.log( pid, username );
+                // console.log( pid, username );
                 // If we're on that deleted post's page, go back a page.
                 if ( pid && username ) {
                     // Both router params are filled in, so we're definitely ON the post page.

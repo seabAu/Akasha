@@ -16,7 +16,7 @@ const UserList = () =>
     useEffect( () =>
     {
         // Get all posts for THIS user.
-        console.log( "UserList -> getSuggestedUsers -> CurrentUser = ", CurrentUser );
+        // console.log( "UserList -> getSuggestedUsers -> CurrentUser = ", CurrentUser );
     
         const getSuggestedUsers = async () =>
         {
@@ -26,7 +26,7 @@ const UserList = () =>
                 const res = await fetch( `/api/users/suggested` );
                 const data = await res.json();
     
-                console.log( "getSuggestedUsers -> data: ", data );
+                // console.log( "getSuggestedUsers -> data: ", data );
                 if ( data.error )
                 {
                     // Error
@@ -39,16 +39,16 @@ const UserList = () =>
                     // Success
 					showToast("Error", data.error, "error");
                     setUserList( data.users );
-                    console.log( "getSuggestedUsers.success -> userList: ", data.users );
+                    // console.log( "getSuggestedUsers.success -> userList: ", data.users );
                 }
             } catch ( error )
             {
                 showToast( "Error", error.message, "error" );
                 // setUserList( [] );
-                console.error( "Error in getSuggestedUsers: ", error );
+                // console.error( "Error in getSuggestedUsers: ", error );
             } finally
             {
-                console.log( "getSuggestedUsers.finally -> userList: ", userList );
+                // console.log( "getSuggestedUsers.finally -> userList: ", userList );
                 setLoading( false );
             }
         };
@@ -82,9 +82,9 @@ const UserList = () =>
                         </Flex>
                     )
                 } ) ) : (
-                    userList.map( ( user, index ) =>
+                    userList?.map( ( user, index ) =>
                     {
-                        console.log( "UserList: User = ", user );
+                        // console.log( "UserList: User = ", user );
                         return (
                             <UserListItem key={ `user-list-item-${ user._id }` } thisUser={ user } />
                         );

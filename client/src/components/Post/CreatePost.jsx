@@ -23,10 +23,9 @@ const CreatePost = () => {
     const currentUser = useRecoilValue( userAtom );
 	const [posts, setPosts] = useRecoilState(postsAtom);
 
-    console.log( "CurrentUser: ", currentUser );
+    // console.log( "CurrentUser: ", currentUser );
 
     const [ remainingCharacters, setRemainingCharacters ] = useState( MAX_CHAR );
-
 
     const handleCreatePost = async () =>
         {

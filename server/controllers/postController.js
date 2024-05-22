@@ -80,7 +80,7 @@ const getPosts = async( req, res ) => {
     try {
         const posts = await Post.find().sort( { createdAt: -1 } );
 
-        res.status( 200 ).json( { data: posts } );
+        res.status( 200 ).json( { message: "Fetched posts successfully.", data: posts } );
     } catch ( error ) {
         res.status( 500 ).json( { error: error.message } )
         console.log( "Error in getPosts: ", error.message );
@@ -125,10 +125,10 @@ const getFeedPosts = async( req, res ) => {
         following = [ ...following, userId ];
 
 
-        const feedPosts = await Post.find( { userId: { $in: following } } ).sort( { createdAt: -1 } );
+        const posts = await Post.find( { userId: { $in: following } } ).sort( { createdAt: -1 } );
         // console.log( "getFeedPosts: feedPosts = ", feedPosts );
 
-        res.status( 200 ).json( { feedPosts } );
+        res.status( 200 ).json( { posts: posts, message: "Fetched feedposts successfully." } );
     } catch ( error ) {
         res.status( 500 ).json( { error: error.message } )
         console.log( "Error in getFeedPosts: ", error.message );

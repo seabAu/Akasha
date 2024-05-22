@@ -61,7 +61,16 @@ const userSchema = mongoose.Schema( {
     },
     permissions: {
         type: [ {} ]
-    }
+    },
+    role: {
+        type: String,
+        required: true,
+        default: "guest",
+    },
+    /// REQUIRED BUT GENERATED
+    token: {
+        type: String,
+    },
 }, {
     // This adds "createdAt" and "updatedAt" timestamps automatically.
     timestamps: true,

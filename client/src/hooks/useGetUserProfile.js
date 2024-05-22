@@ -20,7 +20,7 @@ const useGetUserProfile = () => {
                 const res = await fetch( `/api/users/profile/${username}` );
                 const data = await res.json();
 
-                console.log( "useGetUserProfile -> data: ", data );
+                // console.log( "useGetUserProfile -> data: ", data );
 
                 if ( data.error ) {
                     // Error
@@ -52,13 +52,13 @@ const useGetUserProfile = () => {
 
                     // All set, save and load.
                     setUser( data.user );
-                    console.log( "useGetUserProfile -> success -> data.user: ", user );
+                    // console.log( "useGetUserProfile -> success -> data.user: ", user );
                 }
             } catch ( error ) {
                 console.error( "Error in getUser: ", error );
                 setFetchingUser( false );
             } finally {
-                console.log( "useGetUserProfile -> finally -> user: ", user );
+                // console.log( "useGetUserProfile -> finally -> user: ", user );
                 setFetchingUser( false );
             }
         };

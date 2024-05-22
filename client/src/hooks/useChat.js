@@ -31,7 +31,7 @@ const useChat = () => {
             } );
             const data = await res.json();
 
-            console.log( "handleSendMessage -> data: ", data );
+            // console.log( "handleSendMessage -> data: ", data );
 
             if ( data.error ) {
                 // Error

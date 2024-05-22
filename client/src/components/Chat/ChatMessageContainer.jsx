@@ -14,55 +14,56 @@ const ChatMessageContainer = () => {
 	const currentUser = useRecoilValue(userAtom);
     const showToast = useShowToast();
     // const [ selectedChat, setSelectedChat ] = useRecoilState( selectedChatAtom ); // Currently active chat conversation.
+    const { socket } = useSocket();
     const selectedChat = useRecoilValue( selectedChatAtom ); // Currently active chat conversation.
     const setChats = useSetRecoilState( chatsAtom );
 
-
-    const { socket } = useSocket();
-    
     // Ref for binding to the latest message to keep scrolling to latest message.
     const messageRef = useRef( null );
 
     // Listen for updates from the socket for the messages list.
     useEffect( () =>
     {
-        socket?.on( "newMessage", ( message ) =>
+        if ( socket !== null )
         {
-            // console.log( "newMessage: ", message );
-
-            // Add the new message to the local cached list.
-            if ( selectedChat._id === message.chatId )
+            socket?.on( "newMessage", ( message ) =>
             {
-                setMessages( ( prev ) => [ ...prev, message ] );
-            }
+                // console.log( "newMessage: ", message );
 
-            // Update user chat card details.
-            setChats( ( prev ) =>
-            {
-                const updatedChats = prev.map( ( chat ) =>
+                // Add the new message to the local cached list.
+                if ( selectedChat._id === message.chatId )
                 {
-                    if ( chat._id === selectedChat._id )
-                    {
-                        // Is the selected chat - update the last message of this chat.
-                        return {
-                            ...chat,
-                            lastMessage: {
-                                text: message.text,
-                                senderId: message.senderId
-                            }
-                        };
-                    }
-                    else
-                    {
-                        return chat;
-                    }
-                } );
-                return updatedChats;
-            } );
-        } );
+                    setMessages( ( prev ) => [ ...prev, message ] );
+                }
 
-        // Halt listening for the message on unmount. 
-        return () => socket.off( "newMessage" );
+                // Update user chat card details.
+                setChats( ( prev ) =>
+                {
+                    const updatedChats = prev.map( ( chat ) =>
+                    {
+                        if ( chat._id === selectedChat._id )
+                        {
+                            // Is the selected chat - update the last message of this chat.
+                            return {
+                                ...chat,
+                                lastMessage: {
+                                    text: message.text,
+                                    senderId: message.senderId
+                                }
+                            };
+                        }
+                        else
+                        {
+                            return chat;
+                        }
+                    } );
+                    return updatedChats;
+                } );
+            } );
+
+            // Halt listening for the message on unmount. 
+            return () => socket.off( "newMessage" );
+        }
     }, [socket, selectedChat]);
 
     // Handle isSeen boolean flagging.

@@ -17,12 +17,13 @@ import ChatMessageContainer from '../components/Chat/ChatMessageContainer';
 import ChatUser from '../components/Chat/ChatUser';
 import useShowToast from '../hooks/useShowToast';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useSocket } from '../context/SocketContext';
 import { chatsAtom, selectedChatAtom } from '../atoms/chatsAtom';
 import userAtom from '../atoms/userAtom';
-import { useSocket } from '../context/SocketContext';
 
 const ChatPage = () =>
 {
+    const { socket, onlineUsers } = useSocket();
     const [ chats, setChats ] = useRecoilState( chatsAtom );
     const currentUser = useRecoilValue( userAtom ); // Logged in user
     const [ selectedChat, setSelectedChat ] = useRecoilState( selectedChatAtom ); // Currently active chat conversation.
@@ -32,35 +33,56 @@ const ChatPage = () =>
     const showToast = useShowToast();
 
     // Fetch the onlineUsers via the socket.io context provider hook.
-    const { socket, onlineUsers } = useSocket();
     
-    useEffect(() => {
-        socket.on( "messagesSeen", ( { chatId } ) =>
+    useEffect( () =>
+    {
+        if ( socket !== null )
         {
-            setChats( ( prev ) =>
+            
+            socket.on( "messagesSeen", ( { chatId } ) =>
             {
-                const updatedChats = prev.map( ( chat ) =>
+                console.log( "Chat at chatId = ", chats );
+                chats.forEach( ( chat, index ) =>
                 {
                     if ( chat._id === chatId )
                     {
-                        return {
-                            ...chat,
-                            lastMessage: {
-                                ...chat.lastMessage,
-                                seen: true
-                            }
+                        if ( chat.seen === true )
+                        {
+                            // Already seen, no need to update.
                         }
-                    }
-                    else
-                    {
-                        return chat;
+                        else
+                        {
+                            // Not yet seen, update state.
+
+                            setChats( ( prev ) =>
+                            {
+                                const updatedChats = prev.map( ( chat ) =>
+                                {
+                                    if ( chat._id === chatId )
+                                    {
+                                        return {
+                                            ...chat,
+                                            lastMessage: {
+                                                ...chat.lastMessage,
+                                                seen: true
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return chat;
+                                    }
+                                } );
+                    
+                                return updatedChats;
+                            } );
+                        }
                     }
                 } );
 
-                return updatedChats;
-            } )
-        } );
-        
+            } );
+                
+        }
     }, [socket, setChats]);
 
     useEffect(() => {
@@ -279,7 +301,9 @@ const ChatPage = () =>
                         flexDir={ "column" }
                         alignItems={ "center" }
                         justifyContent={ 'center' }
-                        height={ "400px" }
+                        height={ "auto" }
+                        position={ 'fixed' }
+                        bottom={0}
                     >
                         <GiConversation size={ 100 } />
                         <Text fontSize={ 20 }>Select a conversation to start messaging</Text>

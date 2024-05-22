@@ -157,9 +157,9 @@ const ReplyPost = ({post}) => {
                     <FormControl>
                         <BsFillImageFill style={ { marginBottom: "10px", marginLeft: "5px", cursor: "pointer" } }
                         size={16} onClick={()=>{imageRef.current.click()}} />
-                        <Textarea placeholder='Type your message here' onChange={ handleTextChange } value={ text } />
+                        <Textarea placeholder='Type your message here' onChange={ handleTextChange } value={ text }  ref={initialRef} />
                         <Text fontSize={ "xs" } fontWeight="bold" textAlign={ "right" } m={ 1 } color={ "gray.500" }>{`${remainingCharacters}/${MAX_CHAR}`}</Text>
-                        <Input ref={initialRef} type="file" hidden ref={ imageRef } onChange={ ( e ) => { handleImageChange( e ); } } />
+                        <Input type="file" hidden ref={ imageRef } onChange={ ( e ) => { handleImageChange( e ); } } />
 
                     </FormControl>
 
